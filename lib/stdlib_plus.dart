@@ -2,8 +2,6 @@ library stdlib_plus;
 
 export 'src/build_context_extension.dart';
 export 'src/directory_extensions.dart';
-export 'src/disposable.dart';
-export 'src/disposable_extensions.dart';
 export 'src/element_extension.dart';
 export 'src/environments.dart';
 export 'src/file_extensions.dart';
