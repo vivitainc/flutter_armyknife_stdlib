@@ -1,4 +1,4 @@
-library stdlib_plus;
+library armyknife_stdlib;
 
 export 'src/build_context_extension.dart';
 export 'src/directory_extensions.dart';

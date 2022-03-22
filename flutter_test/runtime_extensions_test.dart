@@ -1,5 +1,5 @@
+import 'package:armyknife_stdlib/armyknife_stdlib.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stdlib_plus/src/int_extensions.dart';
 
 Future main() async {
   test('toHexString()', () {
