@@ -9,6 +9,7 @@
         "tostring",
         "unawaited",
         "vivita",
-        "vivitainc"
+        "vivitainc",
+        "compat"
     ]
 }

@@ -6,8 +6,6 @@ export 'src/disposable.dart';
 export 'src/disposable_extensions.dart';
 export 'src/element_extension.dart';
 export 'src/environments.dart';
-export 'src/error/file_io_exception.dart';
-export 'src/error/runtime_exception.dart';
 export 'src/file_extensions.dart';
 export 'src/functions.dart';
 export 'src/int_extensions.dart';
