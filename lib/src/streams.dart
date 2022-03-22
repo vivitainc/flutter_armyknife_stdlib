@@ -7,7 +7,9 @@ class Streams {
 
   /// Tuple2への型指定を省略してStreamのcombineを行う
   static CombineLatestStream<dynamic, Tuple2<T1, T2>> combineLatest2<T1, T2>(
-      Stream<T1> a, Stream<T2> b) {
+    Stream<T1> a,
+    Stream<T2> b,
+  ) {
     return CombineLatestStream.combine2(
       a,
       b,
