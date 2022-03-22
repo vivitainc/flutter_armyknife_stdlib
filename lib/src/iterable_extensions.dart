@@ -1,20 +1,15 @@
+import 'package:dartx/dartx.dart';
+
 extension IterableFind<T> on Iterable<T> {
-  /// 指定条件で検索し、発見できなければnullを返却する
-  T? find(bool Function(T element) test) {
-    for (final e in this) {
-      if (test(e)) {
-        return e;
-      }
-    }
-    return null;
-  }
+  /// 指定条件で検索し、発見できなければnullを返却する.
+  /// [firstOrNullWhere] のショートカット.
+  T? find(bool Function(T element) test) => firstOrNullWhere(test);
 }
 
 extension IterableIterableFlattenList<T> on Iterable<Iterable<T>> {
   /// SetのListを1つのSetにまとめる.
   List<T> flattenList() {
     final result = <T>[];
-    // ignore: prefer_foreach
     for (final list in this) {
       result.addAll(list);
     }
@@ -26,7 +21,6 @@ extension IterableIterableFlattenSet<T> on Iterable<Iterable<T>> {
   /// SetのListを1つのSetにまとめる.
   Set<T> flattenSet() {
     final result = <T>{};
-    // ignore: prefer_foreach
     for (final set in this) {
       result.addAll(set);
     }
@@ -68,6 +62,18 @@ extension MapEntryIterableToMap<K, V> on Iterable<MapEntry<K, V>> {
   Map<K, V> toMap() {
     final result = <K, V>{};
     result.addEntries(this);
+    return result;
+  }
+}
+
+extension ListIterableFlatten<T> on Iterable<List<T>> {
+  /// SetのListを1つのSetにまとめる.
+  List<T> flatten() {
+    final result = <T>[];
+    // ignore: prefer_foreach
+    for (final list in this) {
+      result.addAll(list);
+    }
     return result;
   }
 }
