@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:rxdart/rxdart.dart';
 
+typedef StreamEmitFunction<T> = void Function(T value);
+
 /// Stream操作関数の糖衣構文
-class Streams {
+final class Streams {
   Streams._();
 
   /// tupleへの型指定を省略してStreamのcombineを行う
@@ -45,5 +49,35 @@ class Streams {
       d,
       (a, b, c, d) => (a, b, c, d),
     );
+  }
+
+  /// 生成型のStreamを生成する.
+  ///
+  /// 生成された [Subject] に対してメッセージを投げることで、別なメソッドからstreamを発生させることができる.
+  /// [block] 内部で発生した例外は呼び出し側に例外として再送される.
+  /// [block] が完了したら自動的にStreamは閉じられる.
+  static Stream<T> generate<T>(
+    Future Function(Subject<T> subject) block,
+  ) async* {
+    Exception? error;
+    final subject = PublishSubject<T>();
+    unawaited(() async {
+      try {
+        await block(subject);
+      } on Exception catch (e) {
+        error = e;
+      } finally {
+        await subject.close();
+      }
+    }());
+
+    await for (final value in subject) {
+      yield value;
+    }
+
+    // Subjectが閉じたら、エラーをチェック
+    if (error != null) {
+      throw error!;
+    }
   }
 }
