@@ -1,17 +1,16 @@
 name: armyknife_stdlib
 description: Utils for Flutter app development.
-version: 0.0.1
+version: 0.0.1+1
 homepage: https://github.com/vivitainc/flutter_armyknife_stdlib
 
 environment:
-  sdk: ">=2.15.1 <3.0.0"
-  flutter: ">=2.8.1"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   rxdart: ^0.27.2
-  tuple: ^2.0.0
   crypto: ^3.0.1
   semaphore: ^0.2.0
   dartx: ^1.0.0

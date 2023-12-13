@@ -3,7 +3,7 @@ Future delayed(final Duration duration) => Future<void>.delayed(duration);
 
 /// NOP命令（No Operation)を発行する.
 /// この命令はDart実行ループの1イテレーションをSkipしたい場合等に使用する.
-Future nop() => delayed(Duration.zero);
+Future nop() => Future.value(null);
 
 /// 指定した2つの型が同一であればtrue.
 /// これはGenericsのTypeチェックに利用する.
