@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
-typedef StreamEmitFunction<T> = void Function(T value);
+part 'streams.stream_emitter.dart';
 
 /// Stream操作関数の糖衣構文
 final class Streams {
@@ -57,13 +57,13 @@ final class Streams {
   /// [block] 内部で発生した例外は呼び出し側に例外として再送される.
   /// [block] が完了したら自動的にStreamは閉じられる.
   static Stream<T> generate<T>(
-    Future Function(Subject<T> subject) block,
+    Future Function(StreamEmitter<T> subject) block,
   ) async* {
     Exception? error;
     final subject = PublishSubject<T>();
     unawaited(() async {
       try {
-        await block(subject);
+        await block(StreamEmitter._(subject));
       } on Exception catch (e) {
         error = e;
       } finally {
