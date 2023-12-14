@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+* Add: Streams.generateのコールバックをStreamEmitインターフェースに変更
+
 ## 0.0.2
 
 * Chg: flutter 3.0
