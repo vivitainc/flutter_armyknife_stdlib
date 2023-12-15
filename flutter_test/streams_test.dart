@@ -25,4 +25,31 @@ Future main() async {
     });
     await delayed(const Duration(milliseconds: 100));
   });
+
+  test('streamInStream', () async {
+    Stream<int> step1() async* {
+      yield 0;
+      await Future.delayed(const Duration(milliseconds: 100));
+      yield 1;
+      throw Exception('error');
+    }
+
+    Stream<int> step2() async* {
+      await for (final v in step1()) {
+        yield v;
+      }
+    }
+
+    try {
+      await for (final v in step2()) {
+        debugPrint('v: $v');
+      }
+
+      fail('no error');
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      debugPrint('e: $e');
+    }
+    debugPrint('finish');
+  });
 }

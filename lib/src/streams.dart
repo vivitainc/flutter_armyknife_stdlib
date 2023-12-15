@@ -60,16 +60,16 @@ final class Streams {
     Future Function(StreamEmitter<T> emitter) block,
   ) {
     var launched = false;
-    late final Subject<dynamic> subject;
-    subject = PublishSubject<dynamic>(onListen: () async {
+    late final Subject<T> subject;
+    subject = PublishSubject(onListen: () async {
       if (launched) {
         return;
       }
       launched = true;
       try {
         await block(StreamEmitter._(subject));
-      } on Exception catch (e) {
-        subject.add(e);
+      } on Exception catch (e, stackTrace) {
+        subject.addError(e, stackTrace);
       } finally {
         await subject.close();
       }
