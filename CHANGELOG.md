@@ -1,3 +1,7 @@
+## 0.0.2+3
+
+* Fix: Streams.generate()の内部構造を修正
+
 ## 0.0.2+2
 
 * Fix: Streams.generate()がlistne前にStreamを終了する場合がある問題を修正
