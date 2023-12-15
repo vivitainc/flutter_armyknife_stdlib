@@ -57,27 +57,29 @@ final class Streams {
   /// [block] 内部で発生した例外は呼び出し側に例外として再送される.
   /// [block] が完了したら自動的にStreamは閉じられる.
   static Stream<T> generate<T>(
-    Future Function(StreamEmitter<T> subject) block,
-  ) async* {
-    Exception? error;
-    final subject = PublishSubject<T>();
-    unawaited(() async {
+    Future Function(StreamEmitter<T> emitter) block,
+  ) {
+    var launched = false;
+    late final Subject<dynamic> subject;
+    subject = PublishSubject<dynamic>(onListen: () async {
+      if (launched) {
+        return;
+      }
+      launched = true;
       try {
         await block(StreamEmitter._(subject));
       } on Exception catch (e) {
-        error = e;
+        subject.add(e);
       } finally {
         await subject.close();
       }
-    }());
+    });
 
-    await for (final value in subject) {
-      yield value;
-    }
-
-    // Subjectが閉じたら、エラーをチェック
-    if (error != null) {
-      throw error!;
-    }
+    return subject.map((event) {
+      if (event is Exception) {
+        throw event;
+      }
+      return event;
+    });
   }
 }

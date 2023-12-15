@@ -4,7 +4,7 @@ part of 'streams.dart';
 ///
 /// [Streams.generate] の送信構造を隠蔽するために使用される.
 final class StreamEmitter<T> {
-  final Subject<T> _subject;
+  final Subject<dynamic> _subject;
 
   StreamEmitter._(this._subject);
 
