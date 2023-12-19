@@ -1,25 +1,27 @@
+import 'dart:async';
+
 import 'package:rxdart/rxdart.dart';
-import 'package:tuple/tuple.dart';
+
+part 'streams.stream_emitter.dart';
 
 /// Stream操作関数の糖衣構文
-class Streams {
+final class Streams {
   Streams._();
 
-  /// Tuple2への型指定を省略してStreamのcombineを行う
-  static CombineLatestStream<dynamic, Tuple2<T1, T2>> combineLatest2<T1, T2>(
+  /// tupleへの型指定を省略してStreamのcombineを行う
+  static CombineLatestStream<dynamic, (T1, T2)> combineLatest2<T1, T2>(
     Stream<T1> a,
     Stream<T2> b,
   ) {
     return CombineLatestStream.combine2(
       a,
       b,
-      (a, b) => Tuple2<T1, T2>(a as T1, b as T2),
+      (a, b) => (a, b),
     );
   }
 
-  /// Tuple3への型指定を省略してStreamのcombineを行う
-  static CombineLatestStream<dynamic, Tuple3<T1, T2, T3>>
-      combineLatest3<T1, T2, T3>(
+  /// tupleへの型指定を省略してStreamのcombineを行う
+  static CombineLatestStream<dynamic, (T1, T2, T3)> combineLatest3<T1, T2, T3>(
     Stream<T1> a,
     Stream<T2> b,
     Stream<T3> c,
@@ -28,7 +30,56 @@ class Streams {
       a,
       b,
       c,
-      (a, b, c) => Tuple3(a as T1, b as T2, c as T3),
+      (a, b, c) => (a, b, c),
     );
+  }
+
+  /// tupleへの型指定を省略してStreamのcombineを行う
+  static CombineLatestStream<dynamic, (T1, T2, T3, T4)>
+      combineLatest4<T1, T2, T3, T4>(
+    Stream<T1> a,
+    Stream<T2> b,
+    Stream<T3> c,
+    Stream<T4> d,
+  ) {
+    return CombineLatestStream.combine4(
+      a,
+      b,
+      c,
+      d,
+      (a, b, c, d) => (a, b, c, d),
+    );
+  }
+
+  /// 生成型のStreamを生成する.
+  ///
+  /// 生成された [Subject] に対してメッセージを投げることで、別なメソッドからstreamを発生させることができる.
+  /// [block] 内部で発生した例外は呼び出し側に例外として再送される.
+  /// [block] が完了したら自動的にStreamは閉じられる.
+  static Stream<T> generate<T>(
+    Future Function(StreamEmitter<T> emitter) block,
+  ) {
+    var launched = false;
+    late final Subject<T> subject;
+    subject = PublishSubject(onListen: () async {
+      if (launched) {
+        return;
+      }
+      launched = true;
+      try {
+        await block(StreamEmitter._(subject));
+      } on Exception catch (e, stackTrace) {
+        subject.addError(e, stackTrace);
+      } finally {
+        await subject.close();
+      }
+    });
+
+    return subject.map((event) {
+      if (event is Exception) {
+        throw event;
+      }
+      return event;
+    });
   }
 }
