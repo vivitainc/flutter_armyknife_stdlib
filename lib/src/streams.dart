@@ -75,11 +75,6 @@ final class Streams {
       }
     });
 
-    return subject.map((event) {
-      if (event is Exception) {
-        throw event;
-      }
-      return event;
-    });
+    return subject;
   }
 }

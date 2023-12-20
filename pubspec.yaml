@@ -1,6 +1,6 @@
 name: armyknife_stdlib
 description: Utils for Flutter app development.
-version: 0.0.2+4
+version: 0.0.2+5
 homepage: https://github.com/vivitainc/flutter_armyknife_stdlib
 
 environment:
